@@ -1,0 +1,150 @@
+Prefix: : <http://www.semanticweb.org/mac/ontologies/2024/11/AreaOfShapes/>
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+
+Ontology: <http://www.semanticweb.org/mac/ontologies/2024/11/AreaOfShapes>
+
+AnnotationProperty: rdfs:comment
+
+# Data Types
+Datatype: rdf:PlainLiteral
+Datatype: xsd:float
+Datatype: xsd:string
+
+
+Class: :MathematicalConcept
+    Annotations: rdfs:comment "A high-level concept in mathematics, e.g., multiplication or geometry."
+
+Class: :Shape
+    Annotations: rdfs:comment "A generic shape concept. Can be further specified."
+
+Class: :Polygon
+    SubClassOf: :Shape
+    Annotations: rdfs:comment "A polygon is a shape with straight sides."
+
+Class: :Triangle
+    SubClassOf: :Polygon
+    Annotations: rdfs:comment "A polygon with three sides. Area = ½ × base × height."
+
+Class: :Rectangle
+    SubClassOf: :Polygon
+    Annotations: rdfs:comment "A polygon with four sides, opposite sides are equal, and area = base × height."
+
+Class: :Square
+    SubClassOf: :Rectangle
+    Annotations: rdfs:comment "A special type of rectangle where all sides are equal, area = side_length²."
+
+Class: :Circle
+    SubClassOf: :Shape
+    Annotations: rdfs:comment "A round shape defined by a radius. Area = π × radius²."
+
+Class: :DifficultyLevel
+    Annotations: rdfs:comment "Represents difficulty levels for shapes or concepts, e.g., Easy, Medium, Hard."
+
+
+# Difficulty Levels
+Individual: :Easy
+    Types: :DifficultyLevel
+    Annotations: rdfs:comment "Represents an easy level of difficulty."
+
+Individual: :Medium
+    Types: :DifficultyLevel
+    Annotations: rdfs:comment "Represents a medium level of difficulty."
+
+Individual: :Hard
+    Types: :DifficultyLevel
+    Annotations: rdfs:comment "Represents a hard level of difficulty."
+
+
+DataProperty: :hasBase
+    Domain: :Triangle, :Rectangle
+    Range: xsd:float
+    SubPropertyOf: owl:topDataProperty
+
+DataProperty: :hasHeight
+    Domain: :Triangle, :Rectangle
+    Range: xsd:float
+    SubPropertyOf: owl:topDataProperty
+
+DataProperty: :hasRadius
+    Domain: :Circle
+    Range: xsd:float
+    SubPropertyOf: owl:topDataProperty
+
+DataProperty: :hasSideLength
+    Domain: :Square
+    Range: xsd:float
+    SubPropertyOf: owl:topDataProperty
+
+DataProperty: :hasFormulaText
+    Domain: :Shape
+    Range: xsd:string
+    SubPropertyOf: owl:topDataProperty
+
+DataProperty: :hasPerimeterFormulaText
+    Domain: :Shape
+    Range: xsd:string
+    SubPropertyOf: owl:topDataProperty
+
+ObjectProperty: :requiresPrerequisiteConcept
+    Domain: :Shape
+    Range: :MathematicalConcept
+    SubPropertyOf: owl:topObjectProperty
+
+ObjectProperty: :hasDifficulty
+    Domain: :Shape
+    Range: :DifficultyLevel
+    SubPropertyOf: owl:topObjectProperty
+
+ObjectProperty: :isSpecialCaseOf
+    Domain: :Square
+    Range: :Rectangle
+    SubPropertyOf: owl:topObjectProperty
+
+DisjointClasses: :Circle, :Polygon
+DisjointClasses: :Square, :Triangle
+
+Class: :Square
+    SubClassOf:
+        :Rectangle,
+        ( :hasSideLength exactly 1 )
+
+Class: :Triangle
+    SubClassOf:
+        ( :hasBase exactly 1 ),
+        ( :hasHeight exactly 1 )
+
+Class: :Circle
+    SubClassOf:
+        ( :hasRadius exactly 1 )
+
+Individual: :multiplicationConcept
+    Types: :MathematicalConcept
+    Annotations: rdfs:comment "Multiplication is a fundamental operation needed for many area calculations."
+
+Individual: :triangleAreaConcept
+    Types: :Triangle
+    Facts:
+        :hasFormulaText "Area of a triangle = ½ × base × height",
+        :requiresPrerequisiteConcept :multiplicationConcept
+
+Individual: :squareAreaConcept
+    Types: :Square
+    Facts:
+        :hasFormulaText "Area of a square = side_length²",
+        :requiresPrerequisiteConcept :multiplicationConcept
+
+Individual: :circleAreaConcept
+    Types: :Circle
+    Facts:
+        :hasFormulaText "Area of a circle = π × radius²",
+        :requiresPrerequisiteConcept :multiplicationConcept
+
+Individual: :rectangleAreaConcept
+    Types: :Rectangle
+    Facts:
+        :hasFormulaText "Area of a rectangle = base × height",
+        :requiresPrerequisiteConcept :multiplicationConcept
